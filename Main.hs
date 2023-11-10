@@ -27,5 +27,3 @@ printSudoku = mapM_ (putStrLn . concatMap showRow)
 showRow :: Maybe Int -> String -- Show a row in the Sudoku grid
 showRow Nothing  = " ."
 showRow (Just n) = ' ' : show n
-
-
