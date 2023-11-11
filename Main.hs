@@ -3,11 +3,6 @@ type Sudoku = [[Maybe Int]]
 size :: Int
 size = 9
 
-main :: IO ()
-main = do
-  putStrLn "Original Sudoku:"
-  printSudoku exampleSudoku
-
 exampleSudoku :: Sudoku -- Example Sudoku grid
 exampleSudoku =
     [ [Just 5, Nothing, Nothing, Just 8, Nothing, Nothing, Nothing, Just 4, Just 9]
@@ -21,9 +16,27 @@ exampleSudoku =
     , [Just 7, Just 2, Nothing, Nothing, Nothing, Just 8, Nothing, Nothing, Just 4]
     ]
 
+
 printSudoku :: Sudoku -> IO () -- Print the Sudoku grid
 printSudoku = mapM_ (putStrLn . concatMap showRow)
+
 
 showRow :: Maybe Int -> String -- Show a row in the Sudoku grid
 showRow Nothing  = " ."
 showRow (Just n) = ' ' : show n
+
+
+getSubgrid :: Sudoku -> Int -> Int -> [Maybe Int] -- Get 3x3 subgrid
+getSubgrid grid row col =
+    [grid !! r !! c | r <- [startRow..endRow], c <- [startCol..endCol]]
+    where
+        startRow = (row `div` 3) * 3
+        endRow = startRow + 2
+        startCol = (col `div` 3) * 3
+        endCol = startCol + 2
+
+main :: IO ()
+main = do
+  putStrLn "Original Sudoku:"
+  printSudoku exampleSudoku
+
