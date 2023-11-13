@@ -1,3 +1,6 @@
+import Data.List
+import Data.Maybe
+
 type Sudoku = [[Maybe Int]]
 
 size :: Int
@@ -35,8 +38,24 @@ getSubgrid grid row col =
         startCol = (col `div` 3) * 3
         endCol = startCol + 2
 
+
+isValid :: Sudoku -> Int -> Int -> Maybe Int -> Bool -- Check if a value is valid in a given position
+isValid grid row col num =
+    notElem num (grid !! row) &&
+    notElem num (transpose grid !! col) &&
+    notElem num (getSubgrid grid row col)
+
+
+findEmpty :: Sudoku -> Maybe (Int, Int) -- Find the first empty position in the Sudoku grid
+findEmpty grid = listToMaybe [(r, c) | r <- [0..size-1], c <- [0..size-1], isNothing (grid !! r !! c)]
+
+
 main :: IO ()
 main = do
   putStrLn "Original Sudoku:"
   printSudoku exampleSudoku
+
+
+
+
 
