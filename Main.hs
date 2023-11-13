@@ -1,3 +1,6 @@
+import Data.List
+
+
 type Sudoku = [[Maybe Int]]
 
 size :: Int
@@ -34,6 +37,15 @@ getSubgrid grid row col =
         endRow = startRow + 2
         startCol = (col `div` 3) * 3
         endCol = startCol + 2
+
+
+
+isValid :: Sudoku -> Int -> Int -> Maybe Int -> Bool -- Check if a value is valid in a given position
+isValid grid row col num =
+    notElem num (grid !! row) &&
+    notElem num (transpose grid !! col) &&
+    notElem num (getSubgrid grid row col)
+
 
 main :: IO ()
 main = do
