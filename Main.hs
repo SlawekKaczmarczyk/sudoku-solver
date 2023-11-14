@@ -50,12 +50,11 @@ findEmpty :: Sudoku -> Maybe (Int, Int) -- Find the first empty position in the 
 findEmpty grid = listToMaybe [(r, c) | r <- [0..size-1], c <- [0..size-1], isNothing (grid !! r !! c)]
 
 
+setElem :: Sudoku -> Int -> Int -> Maybe Int -> Sudoku -- Set a value in a given position in the Sudoku grid
+setElem xs x y val = take x xs ++ [take y (xs !! x) ++ [val] ++ drop (y + 1) (xs !! x)] ++ drop (x + 1) xs
+
 main :: IO ()
 main = do
   putStrLn "Original Sudoku:"
   printSudoku exampleSudoku
-
-
-
-
 
