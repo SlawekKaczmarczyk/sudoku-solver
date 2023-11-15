@@ -53,8 +53,28 @@ findEmpty grid = listToMaybe [(r, c) | r <- [0..size-1], c <- [0..size-1], isNot
 setElem :: Sudoku -> Int -> Int -> Maybe Int -> Sudoku -- Set a value in a given position in the Sudoku grid
 setElem xs x y val = take x xs ++ [take y (xs !! x) ++ [val] ++ drop (y + 1) (xs !! x)] ++ drop (x + 1) xs
 
+
+
+solveSudoku :: Sudoku -> Maybe Sudoku -- Solve the Sudoku by backtracking
+solveSudoku grid = case findEmpty grid of
+    Nothing -> Just grid
+    Just (row, col) -> solveNext grid row col
+
+
+solveNext :: Sudoku -> Int -> Int -> Maybe Sudoku -- Try values for an empty cell
+solveNext grid row col = case [result | num <- [1..size], 
+                                        isValid grid row col (Just num),
+                                        result <- [solveSudoku (setElem grid row col (Just num))],
+                                        isJust result] of
+                            [] -> Nothing
+                            (x:_) -> x
+
+
 main :: IO ()
 main = do
-  putStrLn "Original Sudoku:"
-  printSudoku exampleSudoku
-
+    putStrLn "Sudoku to solve:"
+    printSudoku exampleSudoku
+    putStrLn "\nSolved Sudoku:"
+    case solveSudoku exampleSudoku of
+        Just solution -> printSudoku solution
+        Nothing -> putStrLn "No solution found."
